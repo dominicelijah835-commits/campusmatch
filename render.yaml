@@ -1,0 +1,39 @@
+# Render Blueprint for CampMatch
+# Docs: https://render.com/docs/blueprint-spec
+#
+# After connecting the repo on Render, this file provisions a Node web
+# service. You must set the SUPABASE_* environment variables in the
+# Render dashboard (or via `envVars` overrides) — they are intentionally
+# left as `sync: false` so secrets are never committed.
+services:
+  - type: web
+    name: campmatch
+    runtime: node
+    plan: starter
+    region: oregon
+    branch: main
+    autoDeploy: true
+    buildCommand: npm install && npm run build:render
+    startCommand: npm run start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      # ---- Public (safe to expose to the browser) ----
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: VITE_SUPABASE_PROJECT_ID
+        sync: false
+      # ---- Server-only (used by SSR / future server functions) ----
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: LOVABLE_API_KEY
+        sync: false
