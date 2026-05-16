@@ -14,13 +14,185 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      connections: {
+        Row: {
+          created_at: string
+          id: string
+          receiver_id: string
+          sender_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          receiver_id: string
+          sender_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          receiver_id?: string
+          sender_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connections_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "connections_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lifestyle_metrics: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          guest_policy: string | null
+          id: string
+          location_preference: string | null
+          sleep_cycle: string | null
+          study_habit: string | null
+          updated_at: string
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          guest_policy?: string | null
+          id: string
+          location_preference?: string | null
+          sleep_cycle?: string | null
+          study_habit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          guest_policy?: string | null
+          id?: string
+          location_preference?: string | null
+          sleep_cycle?: string | null
+          study_habit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lifestyle_metrics_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          connection_id: string
+          created_at: string
+          id: string
+          message_text: string
+          sender_id: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string
+          id?: string
+          message_text: string
+          sender_id: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string
+          id?: string
+          message_text?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          department: string | null
+          full_name: string | null
+          gender: string | null
+          id: string
+          instagram_handle: string | null
+          is_searchable: boolean
+          level: string | null
+          onboarded: boolean
+          twitter_handle: string | null
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          department?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id: string
+          instagram_handle?: string | null
+          is_searchable?: boolean
+          level?: string | null
+          onboarded?: boolean
+          twitter_handle?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          department?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string
+          instagram_handle?: string | null
+          is_searchable?: boolean
+          level?: string | null
+          onboarded?: boolean
+          twitter_handle?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_connection_member: {
+        Args: { _conn_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
