@@ -157,7 +157,7 @@ function Onboarding() {
             <PillGroup label="Study habit" value={studyHabit} onChange={setStudyHabit} options={STUDY} />
             <PillGroup label="Sleep cycle" value={sleepCycle} onChange={setSleepCycle} options={SLEEP} />
             <PillGroup label="Guest policy" value={guestPolicy} onChange={setGuestPolicy} options={GUESTS} />
-            <PillGroup label="Preferred area" value={location} onChange={setLocation} options={LOCATIONS} />
+            <Select label="Preferred area in Calabar" value={location} onChange={setLocation} options={LOCATIONS} />
 
             <div>
               <div className="flex items-baseline justify-between">
