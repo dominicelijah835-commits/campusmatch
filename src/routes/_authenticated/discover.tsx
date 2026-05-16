@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { matchScore, type Lifestyle } from "@/lib/match";
 import { toast } from "sonner";
 import { Search, Send, Clock, Instagram, Twitter, MessageCircle, MapPin, GraduationCap } from "lucide-react";
+import { CALABAR_LOCATIONS } from "@/lib/locations";
 
 export const Route = createFileRoute("/_authenticated/discover")({ component: Discover });
 
