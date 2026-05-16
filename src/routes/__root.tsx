@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/lib/auth-context";
+import { IntroSplash } from "@/components/IntroSplash";
 
 import appCss from "../styles.css?url";
 
@@ -85,6 +86,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <IntroSplash />
         <Outlet />
         <Toaster position="top-right" richColors />
       </AuthProvider>
