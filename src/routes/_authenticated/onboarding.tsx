@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Upload, Check, Loader2, ChevronRight, ChevronLeft } from "lucide-react";
+import { CALABAR_LOCATIONS } from "@/lib/locations";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({ component: Onboarding });
 
@@ -12,7 +13,7 @@ const GENDERS = ["Female", "Male", "Other"];
 const STUDY = ["Quiet", "Flexible"];
 const SLEEP = ["Early Bird", "Night Owl"];
 const GUESTS = ["Open to Guests", "No Guests"];
-const LOCATIONS = ["Main Gate", "Small Gate", "Duke Town", "Malabor"];
+const LOCATIONS = CALABAR_LOCATIONS;
 
 function Onboarding() {
   const { user } = useAuth();
