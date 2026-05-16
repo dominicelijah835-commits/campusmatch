@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { matchScore, type Lifestyle } from "@/lib/match";
 import { toast } from "sonner";
 import { Search, Send, Clock, Instagram, Twitter, MessageCircle, MapPin, GraduationCap } from "lucide-react";
+import { CALABAR_LOCATIONS } from "@/lib/locations";
 
 export const Route = createFileRoute("/_authenticated/discover")({ component: Discover });
 
@@ -100,7 +101,7 @@ function Discover() {
           <div className="grid grid-cols-3 gap-2">
             <FilterSelect value={fLevel} onChange={setFLevel} placeholder="Level" options={["100","200","300","400","500","600","Spillover"]} />
             <FilterSelect value={fGender} onChange={setFGender} placeholder="Gender" options={["Female","Male","Other"]} />
-            <FilterSelect value={fLocation} onChange={setFLocation} placeholder="Location" options={["Main Gate","Small Gate","Duke Town","Malabor"]} />
+            <FilterSelect value={fLocation} onChange={setFLocation} placeholder="Location" options={[...CALABAR_LOCATIONS]} />
           </div>
         </div>
       </div>
