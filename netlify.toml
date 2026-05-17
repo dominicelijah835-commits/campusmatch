@@ -1,0 +1,29 @@
+# Netlify configuration for CampMatch (TanStack Start)
+# Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
+#
+# Set the Supabase environment variables in:
+#   Netlify Dashboard → Site settings → Environment variables
+# Never commit secrets to this file.
+
+[build]
+  command = "npm install && npm run build:netlify"
+  # The @netlify/vite-plugin-tanstack-start plugin emits the publish
+  # directory and the SSR function automatically — Netlify discovers
+  # them via the generated .netlify/ output. `publish` is left to the
+  # plugin's default.
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# TanStack Start handles routing on the server — no SPA fallback file
+# is needed. The plugin registers the SSR handler so any unknown URL
+# is forwarded to the TanStack router (which renders the proper page
+# or its notFoundComponent), preventing hard 404s on refresh / deep
+# links to dynamic routes.
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
