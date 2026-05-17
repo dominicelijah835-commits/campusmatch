@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Send, Check, X, MessageCircle } from "lucide-react";
+import { markConnectionRead } from "@/lib/use-unread";
 
 export const Route = createFileRoute("/_authenticated/messages")({ component: Messages });
 
@@ -43,10 +44,16 @@ function Messages() {
 
   useEffect(() => {
     if (!activeId) return;
-    supabase.from("messages").select("*").eq("connection_id", activeId).order("created_at").then(({ data }) => setMsgs((data as Msg[]) ?? []));
+    supabase.from("messages").select("*").eq("connection_id", activeId).order("created_at").then(({ data }) => {
+      setMsgs((data as Msg[]) ?? []);
+      markConnectionRead(activeId);
+    });
     const ch = supabase.channel(`msgs-${activeId}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `connection_id=eq.${activeId}` },
-        (payload) => setMsgs((m) => [...m, payload.new as Msg]))
+        (payload) => {
+          setMsgs((m) => [...m, payload.new as Msg]);
+          markConnectionRead(activeId);
+        })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
   }, [activeId]);

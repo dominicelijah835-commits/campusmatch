@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Compass, MessageCircle, Settings as SettingsIcon, Home, LogOut } from "lucide-react";
 import { toast } from "sonner";
+import { useUnreadCount } from "@/lib/use-unread";
 
 export const Route = createFileRoute("/_authenticated")({ component: Shell });
 
@@ -11,6 +12,7 @@ function Shell() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const unread = useUnreadCount();
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth" });
@@ -43,9 +45,18 @@ function Shell() {
           <nav className="hidden gap-1 md:flex">
             {links.map((l) => {
               const active = path.startsWith(l.to);
+              const showBadge = l.to === "/messages" && unread > 0;
               return (
-                <Link key={l.to} to={l.to} className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
-                  <l.icon className="h-4 w-4" /> {l.label}
+                <Link key={l.to} to={l.to} className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
+                  <span className="relative">
+                    <l.icon className="h-4 w-4" />
+                    {showBadge && (
+                      <span className="absolute -right-2 -top-2 grid h-4 min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-none text-destructive-foreground">
+                        {unread > 9 ? "9+" : unread}
+                      </span>
+                    )}
+                  </span>
+                  {l.label}
                 </Link>
               );
             })}
@@ -65,9 +76,18 @@ function Shell() {
         <div className="mx-auto flex max-w-md items-center justify-around py-2">
           {links.map((l) => {
             const active = path.startsWith(l.to);
+            const showBadge = l.to === "/messages" && unread > 0;
             return (
               <Link key={l.to} to={l.to} className={`flex flex-col items-center gap-0.5 rounded-lg px-4 py-2 text-xs font-medium ${active ? "text-primary" : "text-muted-foreground"}`}>
-                <l.icon className="h-5 w-5" /> {l.label}
+                <span className="relative">
+                  <l.icon className="h-5 w-5" />
+                  {showBadge && (
+                    <span className="absolute -right-2 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-none text-destructive-foreground">
+                      {unread > 9 ? "9+" : unread}
+                    </span>
+                  )}
+                </span>
+                {l.label}
               </Link>
             );
           })}
