@@ -1,0 +1,18 @@
+{
+  "name": "CampMatch — UNICAL Roommates",
+  "short_name": "CampMatch",
+  "description": "Find your perfect roommate at the University of Calabar.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c2340",
+  "theme_color": "#0c2340",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
