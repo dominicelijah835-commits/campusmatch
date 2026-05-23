@@ -70,11 +70,14 @@ export async function subscribeToPush(): Promise<PushSubscription | null> {
 
   let subscription = await registration.pushManager.getSubscription();
   if (!subscription) {
-    subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      ...(vapidKey ? { applicationServerKey: urlBase64ToUint8Array(vapidKey) } : {}),
-    });
+    const options: PushSubscriptionOptionsInit = { userVisibleOnly: true };
+    if (vapidKey) {
+      const key = urlBase64ToUint8Array(vapidKey);
+      options.applicationServerKey = key.buffer.slice(key.byteOffset, key.byteOffset + key.byteLength) as ArrayBuffer;
+    }
+    subscription = await registration.pushManager.subscribe(options);
   }
+
 
   await savePushSubscription(subscription);
   return subscription;
@@ -87,7 +90,7 @@ export async function savePushSubscription(subscription: PushSubscription): Prom
     return;
   }
 
-  const payload = subscription.toJSON() as Record<string, unknown>;
+  const payload = subscription.toJSON();
   const endpoint = subscription.endpoint;
 
   const { error } = await supabase
@@ -96,10 +99,11 @@ export async function savePushSubscription(subscription: PushSubscription): Prom
       {
         user_id: userData.user.id,
         endpoint,
-        subscription: payload,
+        subscription: payload as unknown as Record<string, string>,
       },
       { onConflict: "endpoint" }
     );
+
 
   if (error) console.error("[push] Failed to save subscription:", error);
 }
